@@ -66,7 +66,8 @@ public class MapViewerFrame extends JFrame {
 		super("Map Viewer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(DEFAULT_X, DEFAULT_Y, WINDOW_WIDTH + 16, WINDOW_HEIGHT + 62);
-		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);		
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		defaultFolder = System.getProperty("user.home");
 		this.mapFolder = new File(defaultFolder);
 		this.saveFile = new File(defaultFolder);
 		this.optionWindow = new MapOptions(this);
@@ -100,9 +101,9 @@ public class MapViewerFrame extends JFrame {
 						return;
 					}
 					for( int i = 0; i < mapFiles.length; i++ ) {
-						currentFile = new File(mapFolder.toString() + "\\" + mapFiles[i]);
+						currentFile = new File(mapFolder.toString() + File.separator + mapFiles[i]);
 						if(!currentFile.exists()) {
-							JOptionPane.showMessageDialog(MapViewerFrame.this, "File: " + mapFiles[i] + " not found.",
+							JOptionPane.showMessageDialog(MapViewerFrame.this, "File: '" + currentFile + "' not found.",
 									"Missing Files", JOptionPane.ERROR_MESSAGE);
 							return;						
 						}
