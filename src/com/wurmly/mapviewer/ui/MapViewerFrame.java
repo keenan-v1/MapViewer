@@ -30,6 +30,7 @@ import javax.swing.ButtonGroup;
 public class MapViewerFrame extends JFrame {
 
 	private static final long serialVersionUID = -7904984053821280873L;
+	private static final String VERSION = "1.02";
 	private MapOptions optionWindow;
 	private MapPanel mapPanel;
 	private JPanel contentPanel;
@@ -38,7 +39,7 @@ public class MapViewerFrame extends JFrame {
 	private JMenuItem mntmSaveViewArea;
 	public static final int WINDOW_HEIGHT = 980;
 	public static final int WINDOW_WIDTH = 980;
-	public static final int OPTIONS_HEIGHT = 330;
+	public static final int OPTIONS_HEIGHT = 360;
 	public static final int OPTIONS_WIDTH = 320;
 	private static final int DEFAULT_X = 500;
 	private static final int DEFAULT_Y = 0;
@@ -63,7 +64,7 @@ public class MapViewerFrame extends JFrame {
 	}
 
 	public MapViewerFrame() {
-		super("Map Viewer");
+		super("Map Viewer - " + VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(DEFAULT_X, DEFAULT_Y, WINDOW_WIDTH + 16, WINDOW_HEIGHT + 62);
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -87,7 +88,7 @@ public class MapViewerFrame extends JFrame {
 				JFileChooser filePicker = new JFileChooser();
 				filePicker.setCurrentDirectory(mapFolder);
 				filePicker.setDialogTitle("Choose Map Folder");
-				filePicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				filePicker.addChoosableFileFilter(new FileTypeFilter(".map", "WurmAPI Map"));
 				filePicker.setAcceptAllFileFilterUsed(false);
 				if( filePicker.showOpenDialog(MapViewerFrame.this) == JFileChooser.APPROVE_OPTION ) {
 					File currentFile = filePicker.getSelectedFile();
@@ -95,6 +96,8 @@ public class MapViewerFrame extends JFrame {
 						mapFolder = filePicker.getCurrentDirectory();
 					else if(currentFile.isDirectory())
 						mapFolder = currentFile.getAbsoluteFile();
+					else if(currentFile.toString().endsWith(".map"))
+						mapFolder = filePicker.getCurrentDirectory();
 					else {
 						JOptionPane.showMessageDialog(MapViewerFrame.this, "Invalid Selection. Please choose a folder.",
 								"Invalid Map Folder", JOptionPane.ERROR_MESSAGE);

@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Button;
 
 public class MapOptions extends JFrame {
 
@@ -39,6 +40,8 @@ public class MapOptions extends JFrame {
 	private JCheckBox caveShowZinc;
 	private JCheckBox terrainShowWater;
 	private JCheckBox caveShowIron;
+	private JCheckBox autoRefreshMap;
+	private Button cLineBtn;
 	
 	public MapOptions(MapViewerFrame viewer) {
 		super("Map Viewer - Options");
@@ -52,26 +55,49 @@ public class MapOptions extends JFrame {
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{150, 284, 0};
-		gridBagLayout.rowHeights = new int[]{73, 50, 156, 30, 0};
+		gridBagLayout.rowHeights = new int[]{0, 73, 50, 156, 30, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
+		
+		autoRefreshMap = new JCheckBox("Auto Refresh Map");
+		autoRefreshMap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					getCLineBtn().setEnabled(true);
+				else
+					getCLineBtn().setEnabled(false);
+			}
+		});
+		autoRefreshMap.setSelected(true);
+		GridBagConstraints gbc_autoRefreshMap = new GridBagConstraints();
+		gbc_autoRefreshMap.anchor = GridBagConstraints.WEST;
+		gbc_autoRefreshMap.insets = new Insets(0, 0, 5, 5);
+		gbc_autoRefreshMap.gridx = 0;
+		gbc_autoRefreshMap.gridy = 0;
+		getContentPane().add(autoRefreshMap, gbc_autoRefreshMap);
 		topoPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Topographical Map", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_topoPanel = new GridBagConstraints();
 		gbc_topoPanel.gridwidth = 2;
 		gbc_topoPanel.fill = GridBagConstraints.BOTH;
 		gbc_topoPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_topoPanel.gridx = 0;
-		gbc_topoPanel.gridy = 0;
+		gbc_topoPanel.gridy = 1;
 		getContentPane().add(topoPanel, gbc_topoPanel);
 		GridBagLayout gbl_topoPanel = new GridBagLayout();
-		gbl_topoPanel.columnWidths = new int[]{99, 85, 0};
+		gbl_topoPanel.columnWidths = new int[]{99, 85, 0, 0};
 		gbl_topoPanel.rowHeights = new int[]{20, 20, 0};
-		gbl_topoPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_topoPanel.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_topoPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		topoPanel.setLayout(gbl_topoPanel);
 		
 		topoShowWater = new JCheckBox("Show Water");
+		topoShowWater.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		topoShowWater.setSelected(true);
 		GridBagConstraints gbc_topoShowWater = new GridBagConstraints();
 		gbc_topoShowWater.insets = new Insets(0, 0, 5, 5);
@@ -91,11 +117,24 @@ public class MapOptions extends JFrame {
 		txtContourLines = new JTextField();
 		txtContourLines.setText("250");
 		GridBagConstraints gbc_txtContourLines = new GridBagConstraints();
+		gbc_txtContourLines.insets = new Insets(0, 0, 0, 5);
 		gbc_txtContourLines.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtContourLines.gridx = 1;
 		gbc_txtContourLines.gridy = 1;
 		topoPanel.add(txtContourLines, gbc_txtContourLines);
 		txtContourLines.setColumns(10);
+		
+		cLineBtn = new Button("Set");
+		cLineBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
+		GridBagConstraints gbc_cLineBtn = new GridBagConstraints();
+		gbc_cLineBtn.gridx = 2;
+		gbc_cLineBtn.gridy = 1;
+		topoPanel.add(cLineBtn, gbc_cLineBtn);
 		
 		JPanel terrainPanel = new JPanel();
 		terrainPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Terrain Map", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -104,11 +143,17 @@ public class MapOptions extends JFrame {
 		gbc_terrainPanel.fill = GridBagConstraints.BOTH;
 		gbc_terrainPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_terrainPanel.gridx = 0;
-		gbc_terrainPanel.gridy = 1;
+		gbc_terrainPanel.gridy = 2;
 		getContentPane().add(terrainPanel, gbc_terrainPanel);
 		terrainPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		terrainShowWater = new JCheckBox("Show Water");
+		terrainShowWater.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		terrainShowWater.setSelected(true);
 		terrainPanel.add(terrainShowWater);
 		
@@ -119,7 +164,7 @@ public class MapOptions extends JFrame {
 		gbc_cavePanel.fill = GridBagConstraints.BOTH;
 		gbc_cavePanel.insets = new Insets(0, 0, 5, 0);
 		gbc_cavePanel.gridx = 0;
-		gbc_cavePanel.gridy = 2;
+		gbc_cavePanel.gridy = 3;
 		getContentPane().add(cavePanel, gbc_cavePanel);
 		GridBagLayout gbl_cavePanel = new GridBagLayout();
 		gbl_cavePanel.columnWidths = new int[]{94, 95, 0, 0};
@@ -129,6 +174,12 @@ public class MapOptions extends JFrame {
 		cavePanel.setLayout(gbl_cavePanel);
 		
 		caveShowCaves = new JCheckBox("Caves");
+		caveShowCaves.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowCaves.setSelected(true);
 		GridBagConstraints gbc_caveShowCaves = new GridBagConstraints();
 		gbc_caveShowCaves.anchor = GridBagConstraints.WEST;
@@ -138,6 +189,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowCaves, gbc_caveShowCaves);
 		
 		caveShowLava = new JCheckBox("Lava");
+		caveShowLava.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowLava.setSelected(true);
 		GridBagConstraints gbc_caveShowLava = new GridBagConstraints();
 		gbc_caveShowLava.anchor = GridBagConstraints.WEST;
@@ -147,6 +204,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowLava, gbc_caveShowLava);
 		
 		caveShowAdamantine = new JCheckBox("Adamantine");
+		caveShowAdamantine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowAdamantine.setSelected(true);
 		GridBagConstraints gbc_caveShowAdamantine = new GridBagConstraints();
 		gbc_caveShowAdamantine.anchor = GridBagConstraints.WEST;
@@ -156,6 +219,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowAdamantine, gbc_caveShowAdamantine);
 		
 		caveShowIron = new JCheckBox("Iron");
+		caveShowIron.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowIron.setSelected(true);
 		GridBagConstraints gbc_caveShowIron = new GridBagConstraints();
 		gbc_caveShowIron.anchor = GridBagConstraints.WEST;
@@ -165,6 +234,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowIron, gbc_caveShowIron);
 		
 		caveShowCopper = new JCheckBox("Copper");
+		caveShowCopper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowCopper.setSelected(true);
 		GridBagConstraints gbc_caveShowCopper = new GridBagConstraints();
 		gbc_caveShowCopper.anchor = GridBagConstraints.WEST;
@@ -174,6 +249,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowCopper, gbc_caveShowCopper);
 		
 		caveShowGlimmersteel = new JCheckBox("Glimmersteel");
+		caveShowGlimmersteel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowGlimmersteel.setSelected(true);
 		GridBagConstraints gbc_caveShowGlimmersteel = new GridBagConstraints();
 		gbc_caveShowGlimmersteel.anchor = GridBagConstraints.WEST;
@@ -183,6 +264,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowGlimmersteel, gbc_caveShowGlimmersteel);
 		
 		caveShowGold = new JCheckBox("Gold");
+		caveShowGold.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowGold.setSelected(true);
 		GridBagConstraints gbc_caveShowGold = new GridBagConstraints();
 		gbc_caveShowGold.anchor = GridBagConstraints.WEST;
@@ -192,6 +279,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowGold, gbc_caveShowGold);
 		
 		caveShowTin = new JCheckBox("Tin");
+		caveShowTin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowTin.setSelected(true);
 		GridBagConstraints gbc_caveShowTin = new GridBagConstraints();
 		gbc_caveShowTin.anchor = GridBagConstraints.WEST;
@@ -201,6 +294,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowTin, gbc_caveShowTin);
 		
 		caveShowLead = new JCheckBox("Lead");
+		caveShowLead.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowLead.setSelected(true);
 		GridBagConstraints gbc_caveShowLead = new GridBagConstraints();
 		gbc_caveShowLead.anchor = GridBagConstraints.WEST;
@@ -210,6 +309,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowLead, gbc_caveShowLead);
 		
 		caveShowZinc = new JCheckBox("Zinc");
+		caveShowZinc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowZinc.setSelected(true);
 		GridBagConstraints gbc_caveShowZinc = new GridBagConstraints();
 		gbc_caveShowZinc.anchor = GridBagConstraints.WEST;
@@ -219,6 +324,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowZinc, gbc_caveShowZinc);
 		
 		caveShowSilver = new JCheckBox("Silver");
+		caveShowSilver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowSilver.setSelected(true);
 		GridBagConstraints gbc_caveShowSilver = new GridBagConstraints();
 		gbc_caveShowSilver.anchor = GridBagConstraints.WEST;
@@ -228,6 +339,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowSilver, gbc_caveShowSilver);
 		
 		caveShowSlate = new JCheckBox("Slate");
+		caveShowSlate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowSlate.setSelected(true);
 		GridBagConstraints gbc_caveShowSlate = new GridBagConstraints();
 		gbc_caveShowSlate.anchor = GridBagConstraints.WEST;
@@ -237,6 +354,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowSlate, gbc_caveShowSlate);
 		
 		caveShowMarble = new JCheckBox("Marble");
+		caveShowMarble.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowMarble.setSelected(true);
 		GridBagConstraints gbc_caveShowMarble = new GridBagConstraints();
 		gbc_caveShowMarble.anchor = GridBagConstraints.WEST;
@@ -246,6 +369,12 @@ public class MapOptions extends JFrame {
 		cavePanel.add(caveShowMarble, gbc_caveShowMarble);
 		
 		caveShowWater = new JCheckBox("Water");
+		caveShowWater.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();
+			}
+		});
 		caveShowWater.setSelected(true);
 		GridBagConstraints gbc_caveShowWater = new GridBagConstraints();
 		gbc_caveShowWater.anchor = GridBagConstraints.WEST;
@@ -265,19 +394,21 @@ public class MapOptions extends JFrame {
 		gbc_btnOk.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
 		gbc_btnOk.gridx = 0;
-		gbc_btnOk.gridy = 3;
+		gbc_btnOk.gridy = 4;
 		getContentPane().add(btnOk, gbc_btnOk);
 		
 		JButton btnCancel = new JButton("Restore Defaults");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setDefaults();
+				if(getAutoRefreshMap().isSelected())
+					parent.optionsUpdate();				
 			}
 		});
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
 		gbc_btnCancel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnCancel.gridx = 1;
-		gbc_btnCancel.gridy = 3;
+		gbc_btnCancel.gridy = 4;
 		getContentPane().add(btnCancel, gbc_btnCancel);
 		this.setVisible(false);
 	}
@@ -352,5 +483,11 @@ public class MapOptions extends JFrame {
 	}
 	public boolean isCaveShowIron() {
 		return caveShowIron.isSelected();
+	}
+	public JCheckBox getAutoRefreshMap() {
+		return autoRefreshMap;
+	}
+	public Button getCLineBtn() {
+		return cLineBtn;
 	}
 }

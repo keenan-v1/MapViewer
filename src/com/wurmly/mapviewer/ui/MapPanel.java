@@ -90,7 +90,6 @@ public class MapPanel extends JPanel {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g.drawImage(this.mapImage, imageX, imageY, getImageWidth(), getImageHeight(), null);
-		this.repaint();
 	}
 
 	public void setMapImage(BufferedImage i) {
