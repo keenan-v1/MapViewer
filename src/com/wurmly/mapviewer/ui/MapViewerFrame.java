@@ -97,8 +97,16 @@ public class MapViewerFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					String folderToOpen = null;
+					if(args.length > 0)
+					{
+						folderToOpen = args[0];
+						if(folderToOpen.endsWith("\"")) //Windows stupidity
+							folderToOpen = folderToOpen.substring(0, folderToOpen.length() - 1);
+					}
+					
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					MapViewerFrame frame = new MapViewerFrame();
+					MapViewerFrame frame = new MapViewerFrame(folderToOpen);
 					frame.setVisible(true);
 				}
 				catch (UnsupportedLookAndFeelException e) {
@@ -116,7 +124,7 @@ public class MapViewerFrame extends JFrame {
 		});
 	}
 
-	public MapViewerFrame() {
+	public MapViewerFrame(String folderToOpen) {
 		super(defaultTitle);
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/128x128.png")));
@@ -292,6 +300,14 @@ public class MapViewerFrame extends JFrame {
 				}
 			}
 		});
+		
+		if(folderToOpen != null)
+		{
+			File folder = new File(folderToOpen);
+			if(folder.isFile())
+				folder = folder.getParentFile();
+			loadMapFolder(folder);
+		}
 	}
 	
 	public void setApi(WurmAPI api) {
