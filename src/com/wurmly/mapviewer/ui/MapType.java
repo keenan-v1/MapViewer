@@ -4,7 +4,8 @@ public enum MapType {
 	MAP_NORMAL("Normal"),
 	MAP_TOPOGRAPHICAL("Topographical"),
 	MAP_CAVE("Cave"),
-	MAP_TERRAIN("Terrain");
+	MAP_TERRAIN("Terrain"),
+	MAP_ALL("All");
 	
 	private final String map;
 	
@@ -25,6 +26,8 @@ public enum MapType {
 			return MAP_CAVE;
 		case "Terrain":
 			return MAP_TERRAIN;
+		case "All":
+			return MAP_ALL;
 		case "Normal":
 		default:
 			return MAP_NORMAL;
