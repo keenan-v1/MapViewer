@@ -20,6 +20,11 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import com.wurmonline.mesh.GrassData;
+import com.wurmonline.mesh.GrassData.FlowerType;
+import com.wurmonline.mesh.GrassData.GrassType;
+import com.wurmonline.mesh.GrassData.GrowthStage;
+import com.wurmonline.mesh.Tiles;
 import com.wurmonline.mesh.Tiles.Tile;
 import com.wurmonline.wurmapi.api.WurmAPI;
 
@@ -695,7 +700,19 @@ public class MapViewerFrame extends JFrame {
 			String flags = (st.canBearFruit() ? "Fruit " : "") + (st.canBotanize() ? "Botanize " : "") + (st.canForage() ? "Forage " : "");
 			ttText += "(" + st.getName() + ") Height: "+ sHeight + "<br/>";
 			ttText += "Dirt Depth: " + dHeight + " Rock Height: " + rHeight +"<br/>";
-			ttText += "Flags: " + flags + "</br>";
+			ttText += "Flags: " + flags + "<br/>";
+			if(st.isGrass()) {
+				byte tileData = Tiles.decodeData(st.getIntId());
+				GrassType gt = GrassData.GrassType.decodeTileData(tileData);
+				FlowerType ft = GrassData.FlowerType.decodeTileData(tileData);
+				GrowthStage gs = GrassData.GrowthStage.decodeTileData(tileData);
+				String flowerName = GrassData.getFlowerTypeName(tileData);
+				int flowerType = GrassData.getFlowerType(tileData);
+				String hover = GrassData.getHover(tileData);
+				ttText += "GrassData: [Flower: " + flowerName + "(" + flowerType + ")]<br/>";
+				ttText += gs.toString() + "|" + gt.toString() + "|" + ft.toString() + "<br/>";
+				ttText += hover;
+			}
 			break;
 		}
 		return ttText + "</html>";
