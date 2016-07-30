@@ -44,9 +44,9 @@ public class MapPanel extends JPanel {
 	        public void mouseWheelMoved(MouseWheelEvent e) {
 	            double delta = 0.05f * e.getPreciseWheelRotation();
 	            if(delta < 0)
-	            	zoomIn(e.isShiftDown());
+	            	zoomIn(e.isShiftDown(), false, e.getPoint());
 	            else
-	            	zoomOut(e.isShiftDown());
+	            	zoomOut(e.isShiftDown(), false, e.getPoint());
 	        }
 
 	    });
@@ -129,8 +129,12 @@ public class MapPanel extends JPanel {
 	public void zoomIn(boolean isShiftDown) {
 		zoomIn(isShiftDown, false);
 	}
-	
+
 	public void zoomIn(boolean isShiftDown, boolean isScroll) {
+		zoomIn(isShiftDown, isScroll, null);
+	}
+
+	public void zoomIn(boolean isShiftDown, boolean isScroll, Point p) {
         double zoom = ZOOM_FACTOR;
         if(isScroll)
         	zoom = zoom / ZOOM_MOUSE;
@@ -140,30 +144,46 @@ public class MapPanel extends JPanel {
         
         int iW = getImageWidth();
         int iH = getImageHeight();
-        scale += zoom;
-        if(scale <= minScale)
-        	scale = minScale;
-
-        if(getImageWidth() < getWidth())
-        	imageX = (getWidth()/2) - (getImageWidth()/2);
-        else
-        	imageX -= (getImageWidth() - iW)/4;
-
-        if(getImageHeight() < getHeight())
-        	imageY = (getHeight()/2) - (getImageHeight()/2);
-        else
-        	imageY -= (getImageHeight() - iH)/4;
         
+        if ((p == null)) {
+            scale += zoom;
+            if(scale <= minScale)
+            	scale = minScale;
+
+	        if(getImageWidth() < getWidth())
+	        	imageX = (getWidth()/2) - (getImageWidth()/2);
+	        else
+	        	imageX -= (getImageWidth() - iW)/4;
+	
+	        if(getImageHeight() < getHeight())
+	        	imageY = (getHeight()/2) - (getImageHeight()/2);
+	        else
+	        	imageY -= (getImageHeight() - iH)/4;
+        } else {
+        	Point pScale = translateMapPointScaled(p);
+        	
+            scale += zoom;
+            if(scale <= minScale)
+            	scale = minScale;
+
+            imageX = (int)(p.x - pScale.getX()*scale);
+        	imageY = (int)(p.y - pScale.getY()*scale);
+        }
+                
         checkBounds();
         revalidate();
-        repaint();		
+        repaint();
 	}
-
+	
 	public void zoomOut(boolean isShiftDown) {
 		zoomOut(isShiftDown, false);
 	}
-	
+
 	public void zoomOut(boolean isShiftDown, boolean isScroll) {
+		zoomOut(isShiftDown, false, null);
+	}
+
+	public void zoomOut(boolean isShiftDown, boolean isScroll, Point p) {
         double zoom = ZOOM_FACTOR;
         if(isScroll)
         	zoom = zoom / ZOOM_MOUSE;
@@ -173,18 +193,30 @@ public class MapPanel extends JPanel {
         
         int iW = getImageWidth();
         int iH = getImageHeight();
-        scale -= zoom;
-        if(scale <= minScale)
-        	scale = minScale;
+        
+        if ((p == null)) {
+	        scale -= zoom;
+	        if(scale <= minScale)
+	        	scale = minScale;
+	
+	        if(getImageWidth() < getWidth())
+	        	imageX = (getWidth()/2) - (getImageWidth()/2);
+	        else
+	        	imageX += (iW - getImageWidth())/4;
+	        if(getImageHeight() < getHeight())
+	        	imageY = (getHeight()/2) - (getImageHeight()/2);
+	        else
+	        	imageY += (iH - getImageHeight())/4;
+        } else {
+        	Point pScale = translateMapPointScaled(p);
 
-        if(getImageWidth() < getWidth())
-        	imageX = (getWidth()/2) - (getImageWidth()/2);
-        else
-        	imageX += (iW - getImageWidth())/4;
-        if(getImageHeight() < getHeight())
-        	imageY = (getHeight()/2) - (getImageHeight()/2);
-        else
-        	imageY += (iH - getImageHeight())/4;
+            scale -= zoom;
+            if(scale <= minScale)
+            	scale = minScale;
+
+            imageX = (int)(p.x - pScale.getX()*scale);
+        	imageY = (int)(p.y - pScale.getY()*scale);
+        }
         
         checkBounds();
         revalidate();
