@@ -166,10 +166,10 @@ public class MapPanel extends JPanel {
             if(scale <= minScale)
             	scale = minScale;
 
-            imageX = (int)(p.x - pScale.getX()*scale);
-        	imageY = (int)(p.y - pScale.getY()*scale);
+            imageX = (int)(p.x - (pScale.getX() + 0.5)*scale);
+        	imageY = (int)(p.y - (pScale.getY() + 0.5)*scale);
         }
-                
+
         checkBounds();
         revalidate();
         repaint();
@@ -214,8 +214,8 @@ public class MapPanel extends JPanel {
             if(scale <= minScale)
             	scale = minScale;
 
-            imageX = (int)(p.x - pScale.getX()*scale);
-        	imageY = (int)(p.y - pScale.getY()*scale);
+            imageX = (int)(p.x - (pScale.getX() + 0.5)*scale);
+        	imageY = (int)(p.y - (pScale.getY() + 0.5)*scale);
         }
         
         checkBounds();
