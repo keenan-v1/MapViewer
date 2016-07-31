@@ -46,6 +46,9 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 
+import java.util.Random;
+//import com.wurmonline.server.zones.Zones;
+
 public class MapViewerFrame extends JFrame {
 
 	private static final long serialVersionUID = -7904984053821280873L;
@@ -678,7 +681,11 @@ public class MapViewerFrame extends JFrame {
 				break;
 			}
 			ttText += "Type: " + ct.getName() + "<br/>";
-			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y);
+			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + "<br/>";
+			Random r = new Random();
+			//r.setSeed((x+y*Zones.worldTileSizeY) * 789221L);
+			r.setSeed((x+y*api.getMapData().getWidth()) * 789221L);
+			ttText += "Quality: " + Math.min(100, 20 + r.nextInt(80));
 			break;
 		case MAP_TERRAIN:
 		case MAP_TOPOGRAPHICAL:
@@ -717,7 +724,12 @@ public class MapViewerFrame extends JFrame {
 				break;
 			}
 			ttText += "[Type: " + ct.getName() + " | ";
-			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + "]";
+			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + " | ";
+			Random r = new Random();
+			//r.setSeed((x+y*Zones.worldTileSizeY) * 789221L);
+			r.setSeed((x+y*api.getMapData().getWidth()) * 789221L);
+			ttText += "Quality: " + Math.min(100, 20 + r.nextInt(80)) + "]";
+
 			break;
 		case MAP_TERRAIN:
 		case MAP_TOPOGRAPHICAL:
