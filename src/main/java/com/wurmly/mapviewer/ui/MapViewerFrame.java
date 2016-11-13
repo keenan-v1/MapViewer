@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/com/wurmly/mapviewer/ui/MapViewerFrame.java
 package com.wurmly.mapviewer.ui;
 
 import java.awt.BorderLayout;
@@ -1537,4 +1536,3 @@ public class MapViewerFrame extends JFrame {
 		return VERSION;
 	}
 }
->>>>>>> master:src/main/java/com/wurmly/mapviewer/ui/MapViewerFrame.java
