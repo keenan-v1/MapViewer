@@ -1,27 +1,60 @@
 package com.wurmly.mapviewer.ui;
 
-import com.wurmonline.mesh.Tiles.Tile;
-import com.wurmonline.wurmapi.api.WurmAPI;
-
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Image;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import com.wurmonline.server.zones.Zones;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+
+import com.wurmonline.mesh.GrassData;
+import com.wurmonline.mesh.GrassData.FlowerType;
+import com.wurmonline.mesh.GrassData.GrassType;
+import com.wurmonline.mesh.GrassData.GrowthStage;
+import com.wurmonline.mesh.Tiles;
+import com.wurmonline.mesh.Tiles.Tile;
+import com.wurmonline.wurmapi.api.WurmAPI;
+
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+
+import java.awt.Toolkit;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
 
 public class MapViewerFrame extends JFrame {
 
 	private static final long serialVersionUID = -7904984053821280873L;
+	private static final String VERSION = "1.2.0";
 	private MapToolbar mapToolbar;
 	private MapPanel mapPanel;
 	private JPanel contentPanel;
@@ -29,7 +62,6 @@ public class MapViewerFrame extends JFrame {
 	private WurmAPI api;
 	private JMenuItem mntmSaveMapImage;
 	private JMenuItem mntmSaveViewArea;
-	public static final String VERSION = BuildProperties.getVersion();
 	public static final int WINDOW_HEIGHT = 980;
 	public static final int WINDOW_WIDTH = 980;
 	public static final int OPTIONS_HEIGHT = 980;
@@ -58,7 +90,7 @@ public class MapViewerFrame extends JFrame {
 	private JLabel statusLabel;
 	private int mapWidth;
 	private int mapHeight;
-	private static final String defaultTitle = "MapViewer v" + VERSION;
+	private static final String defaultTitle = "MapViewer - Version " + VERSION;
 	private JRadioButtonMenuItem rdbtnmntmNormal;
 	private JRadioButtonMenuItem rdbtnmntmTopographical;
 	private JRadioButtonMenuItem rdbtnmntmCaveMap;
@@ -100,10 +132,10 @@ public class MapViewerFrame extends JFrame {
 	public MapViewerFrame(String folderToOpen) {
 		super(defaultTitle);
 		List<Image> icons = new ArrayList<Image>();
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/128x128.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/64x64.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/32x32.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/16x16.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/128x128.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/64x64.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/32x32.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/16x16.png")));
 		setIconImages(icons);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(DEFAULT_X, DEFAULT_Y, WINDOW_WIDTH + 16, WINDOW_HEIGHT + 62);
@@ -651,11 +683,7 @@ public class MapViewerFrame extends JFrame {
 				break;
 			}
 			ttText += "Type: " + ct.getName() + "<br/>";
-			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + "<br/>";
-			Random r = new Random();
-			//r.setSeed((x+y*Zones.worldTileSizeY) * 789221L);
-			r.setSeed((x+y*api.getMapData().getWidth()) * 789221L);
-			ttText += "Quality: " + Math.min(100, 20 + r.nextInt(80));
+			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y);
 			break;
 		case MAP_TERRAIN:
 		case MAP_TOPOGRAPHICAL:
@@ -672,7 +700,19 @@ public class MapViewerFrame extends JFrame {
 			String flags = (st.canBearFruit() ? "Fruit " : "") + (st.canBotanize() ? "Botanize " : "") + (st.canForage() ? "Forage " : "");
 			ttText += "(" + st.getName() + ") Height: "+ sHeight + "<br/>";
 			ttText += "Dirt Depth: " + dHeight + " Rock Height: " + rHeight +"<br/>";
-			ttText += "Flags: " + flags + "</br>";
+			ttText += "Flags: " + flags + "<br/>";
+			if(st.isGrass()) {
+				byte tileData = Tiles.decodeData(st.getIntId());
+				GrassType gt = GrassData.GrassType.decodeTileData(tileData);
+				FlowerType ft = GrassData.FlowerType.decodeTileData(tileData);
+				GrowthStage gs = GrassData.GrowthStage.decodeTileData(tileData);
+				String flowerName = GrassData.getFlowerTypeName(tileData);
+				int flowerType = GrassData.getFlowerType(tileData);
+				String hover = GrassData.getHover(tileData);
+				ttText += "GrassData: [Flower: " + flowerName + "(" + flowerType + ")]<br/>";
+				ttText += gs.toString() + "|" + gt.toString() + "|" + ft.toString() + "<br/>";
+				ttText += hover;
+			}
 			break;
 		}
 		return ttText + "</html>";
@@ -694,12 +734,7 @@ public class MapViewerFrame extends JFrame {
 				break;
 			}
 			ttText += "[Type: " + ct.getName() + " | ";
-			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + " | ";
-			Random r = new Random();
-			//r.setSeed((x+y*Zones.worldTileSizeY) * 789221L);
-			r.setSeed((x+y*api.getMapData().getWidth()) * 789221L);
-			ttText += "Quality: " + Math.min(100, 20 + r.nextInt(80)) + "]";
-
+			ttText += "Quantity: " + api.getMapData().getCaveResourceCount(x, y) + "]";
 			break;
 		case MAP_TERRAIN:
 		case MAP_TOPOGRAPHICAL:
@@ -749,3 +784,4 @@ public class MapViewerFrame extends JFrame {
 		return VERSION;
 	}
 }
+
