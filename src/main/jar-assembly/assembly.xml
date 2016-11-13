@@ -1,5 +1,5 @@
 <assembly>
-    <id>${project.version}-release</id>
+    <id>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-release</id>
     <formats>
         <format>jar</format>
     </formats>

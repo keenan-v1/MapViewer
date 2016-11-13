@@ -29,7 +29,7 @@ public class MapViewerFrame extends JFrame {
 	private WurmAPI api;
 	private JMenuItem mntmSaveMapImage;
 	private JMenuItem mntmSaveViewArea;
-	public static final String VERSION = MapViewerFrame.class.getPackage().getImplementationVersion();
+	public static final String VERSION = BuildProperties.getVersion();
 	public static final int WINDOW_HEIGHT = 980;
 	public static final int WINDOW_WIDTH = 980;
 	public static final int OPTIONS_HEIGHT = 980;

@@ -74,7 +74,12 @@ public class MapHelpWindow extends JFrame {
 		JPanel aboutPanel = new JPanel();
 		helpTabbedPane.addTab("About", null, aboutPanel, null);
 		
-		JLabel lblLblabout = new JLabel("<html>\r\n<center><h1>Map Viewer for Wurm Unlimited</h1></center>\r\n<p><b>Written by:</b> Jonathan Walker<br />\r\n<b>Email:</b> <a href=\"mailto:xorith@gmail.com\">xorith@gmail.com</a><br/>\r\n<b>Github:</b> <a href=\"https://github.com/xorith/MapViewer\">https://github.com/xorith/MapViewer</a></p>\r\n<p>Wurm Online and Wurm Unlimited is owned by Code Club AB.<br/>\r\n<a href=\"http://www.wurmunlimited.com\">Wurm Unlimited</a><br/>\r\n<a href=\"http://www.wurmonline.com\">Wurm Online</a></p>\r\n</html>");
+		JLabel lblLblabout = new JLabel("<html>\r\n<center><h1>Map Viewer for Wurm Unlimited</h1></center>\r\n<p><b>Written by:</b> Jonathan Walker<br />\r\n" +
+				"<b>Email:</b> <a href=\"mailto:xorith@gmail.com\">xorith@gmail.com</a><br/>\r\n" +
+				"<b>Github:</b> <a href=\"https://github.com/xorith/MapViewer\">https://github.com/xorith/MapViewer</a></p>\r\n" +
+				"<p>Wurm Online and Wurm Unlimited is owned by Code Club AB.<br/>\r\n<a href=\"http://www.wurmunlimited.com\">Wurm Unlimited</a><br/>\r\n" +
+				"<a href=\"http://www.wurmonline.com\">Wurm Online</a></p>\r\n\r\n<p>Build: "+ BuildProperties.getGitSha1().substring(0, 7)+" @ "+
+				BuildProperties.getBuildTimeString() +"</p>\r\n</html>");
 		aboutPanel.add(lblLblabout);
 		
 		JPanel licensePanel = new JPanel();
