@@ -1,0 +1,17 @@
+language: java
+jdk:
+- oraclejdk8
+before_install: mvn validate
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls ./target/*-release.jar)
+  - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
+deploy:
+  provider: releases
+  api_key:
+    secure: ChL1DjnvjqsKBtCYa9+93s9Mq7YUxIT9lCHmYpeiZJZXjrAkhov6YFUmWkoWlL1EtQ1xWK0zyVfEDGWt9atIC9IW4sgLwikn84fYMrfWJdA8/+oAwohqZSJYwmx09sZZukasRGi1Kv10eDqia3QgOqYjaNQ+NvcUMB1CGyRpiNDQH5RfR+rCtcNIr1kCCXMht5OopyY0m/OJDhUJMdrrjqjzeb1MqOSoh9Ai5nZUyNUiIPqYtBbD7RlUtdiZKHY5lvxJGgf4D1tOT56XWeKi219iMQjOZUud2ADPPeai09MARgCTbfLOQ33Qi3J9lWiZ8hsb9KDcJuvgBCnvU2TD9vkBhEtPB2Biqj6MFeVo8KqB2hUJLdqgoKDt0Ltaouv7w3UC/QssrnZbzIq8Jpwy/iHbv/JgVubpzuIlaOTEE39bLYqdv7bhAH+bqJZkuYKjsNkpASdnocZPOrm0ol/VUFsePkk+0pa9GNcgVs75niA6U7D1UN2DSOAQL32zpEQ4F++KKx2R1GlrbogU60PbQgEvRjHkV9oOa4jLjmMzhuF0fkGt2vGh/T78y6UNDsB4WBpQLL5SacDiyq3Flsd7ETxbV/jQGLde5ZvwWwV0CxicZ3zEkUs8kvmXpdO3CxB58JV+GdKolxRIVHhwrsgzoYBFwpPuhMyg07MQVv590eE=
+  file_glob: true
+  file: "${RELEASE_PKG_FILE}"
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: xorith/MapViewer
