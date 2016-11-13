@@ -1,3 +1,5 @@
 /bin/
-
-.settings/Thumbs.db
+.settings
+.idea
+/target/
+MapViewer.iml
