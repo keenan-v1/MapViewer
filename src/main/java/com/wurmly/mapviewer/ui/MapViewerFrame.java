@@ -13,10 +13,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 //import com.wurmonline.server.zones.Zones;
@@ -24,7 +22,6 @@ import java.util.logging.Logger;
 public class MapViewerFrame extends JFrame {
 
 	private static final long serialVersionUID = -7904984053821280873L;
-	private static final String VERSION = "1.2.0";
 	private MapToolbar mapToolbar;
 	private MapPanel mapPanel;
 	private JPanel contentPanel;
@@ -32,6 +29,7 @@ public class MapViewerFrame extends JFrame {
 	private WurmAPI api;
 	private JMenuItem mntmSaveMapImage;
 	private JMenuItem mntmSaveViewArea;
+	public static final String VERSION = MapViewerFrame.class.getPackage().getImplementationVersion();
 	public static final int WINDOW_HEIGHT = 980;
 	public static final int WINDOW_WIDTH = 980;
 	public static final int OPTIONS_HEIGHT = 980;
@@ -60,7 +58,7 @@ public class MapViewerFrame extends JFrame {
 	private JLabel statusLabel;
 	private int mapWidth;
 	private int mapHeight;
-	private static final String defaultTitle = "MapViewer - Version " + VERSION;
+	private static final String defaultTitle = "MapViewer v" + VERSION;
 	private JRadioButtonMenuItem rdbtnmntmNormal;
 	private JRadioButtonMenuItem rdbtnmntmTopographical;
 	private JRadioButtonMenuItem rdbtnmntmCaveMap;
