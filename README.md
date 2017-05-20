@@ -6,6 +6,10 @@
 
 Opens maps created by WurmAPI
 
+# Latest Update (1.3.4)
+- Added Rocksalt & Sandstone
+- Updated bundled common library to 1.3.5.5
+
 ## Requirements
 ### Running MapViewer
 - [Java 8 (64-bit)](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)

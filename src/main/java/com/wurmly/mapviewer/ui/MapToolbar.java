@@ -52,6 +52,8 @@ public class MapToolbar extends JPanel {
 	private JCheckBox caveShowZinc;
 	private JCheckBox terrainShowWater;
 	private JCheckBox caveShowIron;
+	private JCheckBox caveShowRocksalt;
+	private JCheckBox caveShowSandstone;
 	private Button cLineBtn;
 	private Point dPoint;
 	private JTabbedPane tabOptions;
@@ -167,9 +169,9 @@ public class MapToolbar extends JPanel {
 		cavePanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gbl_cavePanel = new GridBagLayout();
 		gbl_cavePanel.columnWidths = new int[] { 79, 70, 0 };
-		gbl_cavePanel.rowHeights = new int[] { 22, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_cavePanel.rowHeights = new int[] { 20, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_cavePanel.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
-		gbl_cavePanel.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_cavePanel.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 		cavePanel.setLayout(gbl_cavePanel);
 
 		caveShowCaves = new JCheckBox("Caves");
@@ -407,6 +409,40 @@ public class MapToolbar extends JPanel {
 		gbc_caveShowWater.gridy = 6;
 		cavePanel.add(caveShowWater, gbc_caveShowWater);
 
+		caveShowRocksalt = new JCheckBox("Rocksalt");
+		caveShowRocksalt.setMnemonic('k');
+		caveShowRocksalt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				parent.optionsUpdate(MapType.MAP_CAVE);
+			}
+		});
+		caveShowRocksalt.setSelected(true);
+		GridBagConstraints gbc_caveShowRocksalt = new GridBagConstraints();
+		gbc_caveShowRocksalt.anchor = GridBagConstraints.WEST;
+		gbc_caveShowRocksalt.insets = new Insets(0, 0, 5, 5);
+		gbc_caveShowRocksalt.gridx = 0;
+		gbc_caveShowRocksalt.gridy = 7;
+		cavePanel.add(caveShowRocksalt, gbc_caveShowRocksalt);
+
+		caveShowSandstone = new JCheckBox("Sandstone");
+		//caveShowSandstone.setMnemonic('v');
+		caveShowSandstone.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				parent.optionsUpdate(MapType.MAP_CAVE);
+			}
+		});
+		caveShowSandstone.setSelected(true);
+		GridBagConstraints gbc_caveShowSandstone = new GridBagConstraints();
+		gbc_caveShowSandstone.anchor = GridBagConstraints.WEST;
+		gbc_caveShowSandstone.insets = new Insets(0, 0, 5, 5);
+		gbc_caveShowSandstone.gridx = 1;
+		gbc_caveShowSandstone.gridy = 7;
+		cavePanel.add(caveShowSandstone, gbc_caveShowSandstone);
+
 		tabOptions.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent evt) {
@@ -587,6 +623,13 @@ public class MapToolbar extends JPanel {
 
 	public boolean isCaveShowIron() {
 		return caveShowIron.isSelected();
+	}
+
+	public boolean isCaveShowRocksalt() {
+		return caveShowRocksalt.isSelected();
+	}
+	public boolean isCaveShowSandstone() {
+		return caveShowSandstone.isSelected();
 	}
 
 	public Button getCLineBtn() {

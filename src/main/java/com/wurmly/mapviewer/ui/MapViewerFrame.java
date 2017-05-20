@@ -132,10 +132,10 @@ public class MapViewerFrame extends JFrame {
 	public MapViewerFrame(String folderToOpen) {
 		super(defaultTitle);
 		List<Image> icons = new ArrayList<Image>();
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/128x128.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/64x64.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/32x32.png")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/com/wurmly/mapviewer/icons/16x16.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/128x128.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/64x64.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/32x32.png")));
+		icons.add(Toolkit.getDefaultToolkit().getImage(MapViewerFrame.class.getResource("/icons/16x16.png")));
 		setIconImages(icons);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(DEFAULT_X, DEFAULT_Y, WINDOW_WIDTH + 16, WINDOW_HEIGHT + 62);
@@ -540,9 +540,15 @@ public class MapViewerFrame extends JFrame {
 		if(this.mapToolbar.isCaveShowCaves()) {
 			caveTiles.add(Tile.TILE_CAVE);
 			caveTiles.add(Tile.TILE_CAVE_FLOOR_REINFORCED);
-			caveTiles.add(Tile.TILE_CAVE_EXIT);			
+			caveTiles.add(Tile.TILE_CAVE_EXIT);
 		}
-		
+
+		if(this.mapToolbar.isCaveShowRocksalt())
+			caveTiles.add(Tile.TILE_CAVE_WALL_ROCKSALT);
+
+		if(this.mapToolbar.isCaveShowSandstone())
+			caveTiles.add(Tile.TILE_CAVE_WALL_SANDSTONE);
+
 		if(this.mapToolbar.isCaveShowIron())
 			caveTiles.add(Tile.TILE_CAVE_WALL_ORE_IRON);
 		
