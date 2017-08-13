@@ -54,7 +54,7 @@ import java.awt.event.KeyAdapter;
 public class MapViewerFrame extends JFrame {
 
 	private static final long serialVersionUID = -7904984053821280873L;
-	private static final String VERSION = "1.2.0";
+	private static final String VERSION = BuildProperties.getVersion();
 	private MapToolbar mapToolbar;
 	private MapPanel mapPanel;
 	private JPanel contentPanel;
@@ -73,7 +73,7 @@ public class MapViewerFrame extends JFrame {
 	private MapType mapType = MapType.MAP_TERRAIN;
 	private static final String[] mapFiles = {"top_layer.map", "flags.map", "map_cave.map", "resources.map", "rock_layer.map" };
 	private static final String defaultMapFile = mapFiles[0];
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("yymmdd-hhmmss");
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd-hhmmss");
 	private static final File defaultFolder = new File(System.getProperty("user.home"));
 	private File lastMapFolder = defaultFolder;
 	private File lastMapImageFile = defaultFolder;

@@ -6,7 +6,7 @@
 
     <groupId>com.wurmly</groupId>
     <artifactId>MapViewer</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.3.6</version>
     <packaging>jar</packaging>
     <name>Wurm Map Viewer</name>
     <description>Application to view maps intended for Wurm servers</description>
@@ -128,7 +128,7 @@
         <dependency>
             <groupId>com.github.codeclubab</groupId>
             <artifactId>WurmModServerApi</artifactId>
-            <version>1.3.5.5</version>
+            <version>1.4.0.2</version>
         </dependency>
     </dependencies>
 
