@@ -1,30 +1,42 @@
 package com.wurmly.mapviewer.ui;
-import java.io.File;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
-public class MapFileTypeFilter extends FileFilter {
-		private String extension;
-		private String description;
+class MapFileTypeFilter extends FileFilter
+{
+    private final String extension;
+    private final String description;
 
-	    public MapFileTypeFilter(String extension, String description) {
-	        this.extension = extension;
-	        this.description = description;
-	    }
+    MapFileTypeFilter()
+    {
+        extension = ".map";
+        description = "WurmAPI Map";
+    }
 
-	    @Override
-	    public boolean accept(File file) {
-	        if (file.isDirectory()) {
-	            return true;
-	        }
-	        return file.getName().endsWith(extension);
-	    }
-		
-		@Override
-	    public String getDescription() {
-	        return description + String.format(" (*%s)", extension);
-	    }
-		
-		public String getExtension() {
-			return this.extension;
-		}
-	}
+    @Override
+    public boolean accept(@NotNull File file)
+    {
+        if (file.isDirectory())
+        {
+            return true;
+        }
+        return file.getName().endsWith(extension);
+    }
+
+    @NotNull
+    @Override
+    public String getDescription()
+    {
+        return description + String.format(" (*%s)", extension);
+    }
+
+    @Contract(pure = true)
+    public String getExtension()
+    {
+        return this.extension;
+    }
+}

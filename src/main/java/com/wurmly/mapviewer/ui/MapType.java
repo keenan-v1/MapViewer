@@ -1,37 +1,37 @@
 package com.wurmly.mapviewer.ui;
 
-public enum MapType {
-	MAP_NORMAL("Normal"),
-	MAP_TOPOGRAPHICAL("Topographical"),
-	MAP_CAVE("Cave"),
-	MAP_TERRAIN("Terrain"),
-	MAP_ALL("All");
-	
-	private final String map;
-	
-	private MapType(String type) {
-		this.map = type;
-	}
-	
-	@Override
-	public String toString() {
-		return this.map;
-	}
-	
-	public static MapType getType(String type) {
-		switch(type) {
-		case "Topographical":
-			return MAP_TOPOGRAPHICAL;
-		case "Cave":
-			return MAP_CAVE;
-		case "Terrain":
-			return MAP_TERRAIN;
-		case "All":
-			return MAP_ALL;
-		case "Normal":
-		default:
-			return MAP_NORMAL;
+import com.wurmly.mapviewer.localization.Localization;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-		}
-	}
+public enum MapType
+{
+    MAP_NORMAL(Localization.getInstance().getMessageFor("map-normal")),
+    MAP_TOPOGRAPHICAL(Localization.getInstance().getMessageFor("map-topographical")),
+    MAP_CAVE(Localization.getInstance().getMessageFor("map-cave")),
+    MAP_TERRAIN(Localization.getInstance().getMessageFor("map-terrain")),
+    MAP_ALL(Localization.getInstance().getMessageFor("map-all"));
+
+    private final String map;
+
+    MapType(String type)
+    {
+        this.map = type;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.map;
+    }
+
+    @NotNull
+    @Contract(pure = true)
+    public static MapType getType(String type)
+    {
+        for (MapType value : values())
+            if (value.map.equals(type))
+                return value;
+        return MAP_NORMAL;
+    }
 }
