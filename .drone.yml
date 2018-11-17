@@ -1,5 +1,5 @@
 pipeline:
   build:
-    image: java:openjdk-8
+    image: maven:3.5-alpine
     commands:
-      - mvn clean build
+      - mvn clean package
