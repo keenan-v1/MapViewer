@@ -1,5 +1,5 @@
 pipeline:
   build:
-    image: openjdk8
+    image: java:oracle-java8
     commands:
       - mvn clean build
