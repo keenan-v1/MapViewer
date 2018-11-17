@@ -1,0 +1,5 @@
+pipeline:
+  build:
+    image: openjdk8
+    commands:
+      - mvn clean build
