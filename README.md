@@ -28,3 +28,4 @@ Opens maps created by WurmAPI
 - Make sure to use `mvn validate` before `mvn install`
 
 __You must run `mvn validate` prior to `mvn install` in order to install `./lib/common.jar` as it is not hosted in a repository yet!__
+
