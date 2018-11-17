@@ -2,4 +2,5 @@ pipeline:
   build:
     image: maven:3.5-alpine
     commands:
+      - apt-get install git
       - mvn clean package
