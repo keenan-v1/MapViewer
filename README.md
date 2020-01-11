@@ -6,7 +6,7 @@
 
 Opens maps created by WurmAPI
 
-# Latest Update (1.3.8)
+# Latest Update (1.4.0)
 - CLI via new flags
 - Localization (no translations yet)
 
