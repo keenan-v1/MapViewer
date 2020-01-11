@@ -15,4 +15,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    repo: xorith/MapViewer
+    repo: keenan-v1/MapViewer

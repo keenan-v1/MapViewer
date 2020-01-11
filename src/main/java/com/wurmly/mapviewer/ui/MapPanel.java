@@ -1,5 +1,6 @@
 package com.wurmly.mapviewer.ui;
 
+import com.wurmly.mapviewer.shared.MapType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

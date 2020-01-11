@@ -1,7 +1,11 @@
 package com.wurmly.mapviewer.ui;
 
+import com.wurmly.mapviewer.configuration.Parameters;
 import com.wurmly.mapviewer.localization.Localization;
 import com.wurmly.mapviewer.properties.BuildProperties;
+import com.wurmly.mapviewer.shared.ImageFileTypeFilter;
+import com.wurmly.mapviewer.shared.MapType;
+import com.wurmly.mapviewer.shared.Shared;
 import com.wurmonline.mesh.GrassData;
 import com.wurmonline.mesh.GrassData.FlowerType;
 import com.wurmonline.mesh.GrassData.GrassType;
@@ -23,13 +27,14 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class MapViewerFrame extends JFrame
+public class MapViewerFrame extends JFrame
 {
 
     private static final long serialVersionUID = -7904984053821280873L;
@@ -55,20 +60,12 @@ class MapViewerFrame extends JFrame
     private MapType mapType = MapType.MAP_TERRAIN;
     private static final String[] mapFiles = {"top_layer.map", "flags.map", "map_cave.map", "resources.map", "rock_layer.map"};
     private static final String defaultMapFile = mapFiles[0];
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd-hhmmss");
-    private static final File defaultFolder = new File(System.getProperty("user.home"));
     @Nullable
-    private File lastMapFolder = defaultFolder;
+    private File lastMapFolder = new File(Parameters.INSTANCE.getOutputFolder(System.getProperty("user.home")));
     @Nullable
-    private File lastMapImageFile = defaultFolder;
+    private File lastMapImageFile = new File(Parameters.INSTANCE.getOutputFolder(System.getProperty("user.home")));
     @Nullable
-    private File lastScreenCapFile = defaultFolder;
-    private static final ImageFileTypeFilter[] fileTypes = {
-            new ImageFileTypeFilter(ImageFileTypeFilter.TYPE_PNG),
-            new ImageFileTypeFilter(ImageFileTypeFilter.TYPE_JPG),
-            new ImageFileTypeFilter(ImageFileTypeFilter.TYPE_GIF),
-            new ImageFileTypeFilter(ImageFileTypeFilter.TYPE_BMP)
-    };
+    private File lastScreenCapFile = new File(Parameters.INSTANCE.getOutputFolder(System.getProperty("user.home")));
     private static final int defaultFileType = ImageFileTypeFilter.TYPE_PNG;
     @NotNull
     private String mapName = "Unknown";
@@ -88,7 +85,7 @@ class MapViewerFrame extends JFrame
     private final HashMap<Tile, Boolean> tileVisibility = new HashMap<>();
     private boolean showCaveWater = true;
 
-    public static void main(@NotNull String[] args)
+    public static void start()
     {
         EventQueue.invokeLater(new Runnable()
         {
@@ -96,16 +93,8 @@ class MapViewerFrame extends JFrame
             {
                 try
                 {
-                    String folderToOpen = null;
-                    if (args.length > 0)
-                    {
-                        folderToOpen = args[0];
-                        if (folderToOpen.endsWith("\"")) //Windows stupidity
-                            folderToOpen = folderToOpen.substring(0, folderToOpen.length() - 1);
-                    }
-
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    MapViewerFrame frame = new MapViewerFrame(folderToOpen);
+                    MapViewerFrame frame = new MapViewerFrame();
                     frame.setVisible(true);
                 }
                 catch (UnsupportedLookAndFeelException e)
@@ -127,7 +116,7 @@ class MapViewerFrame extends JFrame
         });
     }
 
-    private MapViewerFrame(@Nullable String folderToOpen)
+    private MapViewerFrame()
     {
         super(defaultTitle);
         List<Image> icons = new ArrayList<>();
@@ -276,9 +265,9 @@ class MapViewerFrame extends JFrame
             }
         });
 
-        if (folderToOpen != null)
+        if (Parameters.INSTANCE.getInputFolder() != null)
         {
-            File folder = new File(folderToOpen);
+            File folder = new File(Parameters.INSTANCE.getInputFolder());
             if (folder.isFile())
                 folder = folder.getParentFile();
             loadMapFolder(folder);
@@ -419,45 +408,6 @@ class MapViewerFrame extends JFrame
         return getSaveFile(false, lastMapImageFile);
     }
 
-    private String getSaveFileName(boolean isScreenCap)
-    {
-        return getSaveFileName(isScreenCap, defaultFileType);
-    }
-
-    private String getSaveFileName(boolean isScreenCap, int fileType)
-    {
-        String fDateTime = dateFormat.format(new Date());
-        String saveFileName;
-        if (isScreenCap)
-        {
-            saveFileName = mapName + "-mapdetail_" + fDateTime;
-        }
-        else
-        {
-            switch (mapType)
-            {
-                case MAP_TOPOGRAPHICAL:
-                    saveFileName = mapName + "-topographical_" + fDateTime;
-                    break;
-                case MAP_CAVE:
-                    saveFileName = mapName + "-ores_" + fDateTime;
-                    break;
-                case MAP_TERRAIN:
-                    saveFileName = mapName + "-terrain_" + fDateTime;
-                    break;
-                case MAP_NORMAL:
-                    saveFileName = mapName + "-isometric_" + fDateTime;
-                    break;
-                case MAP_ALL:
-                default:
-                    saveFileName = mapName + fDateTime;
-            }
-        }
-        if (fileType != -1)
-            saveFileName += fileTypes[fileType].getExtension();
-        return saveFileName;
-    }
-
     private void setStatus()
     {
         setStatus("");
@@ -472,7 +422,7 @@ class MapViewerFrame extends JFrame
     private File getSaveFile(boolean isScreenCap, File folder)
     {
         JFileChooser filePicker = new JFileChooser();
-        String saveFileName = getSaveFileName(isScreenCap);
+        String saveFileName = Shared.getSaveFileName(isScreenCap, defaultFileType, mapType, mapName);
 
         filePicker.setCurrentDirectory(folder);
         filePicker.setMultiSelectionEnabled(false);
@@ -481,7 +431,7 @@ class MapViewerFrame extends JFrame
         filePicker.setSelectedFile(new File(saveFileName));
         filePicker.setApproveButtonText(Localization.getInstance().getMessageFor("dialog-save-approve"));
 
-        for (ImageFileTypeFilter fileType : fileTypes) filePicker.addChoosableFileFilter(fileType);
+        for (ImageFileTypeFilter fileType : Shared.fileTypes) filePicker.addChoosableFileFilter(fileType);
 
         filePicker.addPropertyChangeListener(JFileChooser.FILE_FILTER_CHANGED_PROPERTY, evt -> {
             ImageFileTypeFilter filter = (ImageFileTypeFilter) evt.getNewValue();
@@ -491,7 +441,7 @@ class MapViewerFrame extends JFrame
             String path;
 
             if (selectedFile == null)
-                path = getSaveFileName(isScreenCap, filter.getType());
+                path = Shared.getSaveFileName(isScreenCap, filter.getType(), mapType, mapName);
             else
                 path = selectedFile.getName();
 

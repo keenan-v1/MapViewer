@@ -1,4 +1,4 @@
-package com.wurmly.mapviewer.ui;
+package com.wurmly.mapviewer.shared;
 
 import com.wurmly.mapviewer.localization.Localization;
 import org.jetbrains.annotations.Contract;

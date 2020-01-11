@@ -1,14 +1,14 @@
 # MapViewer
 
-[![Build Status](https://travis-ci.org/xorith/MapViewer.svg?branch=master)](https://travis-ci.org/xorith/MapViewer)
-[![GitHub issues](https://img.shields.io/github/issues/xorith/MapViewer.svg)](https://github.com/xorith/MapViewer/issues)
-[![GitHub version](https://badge.fury.io/gh/xorith%2FMapViewer.svg)](https://github.com/xorith/MapViewer/releases/latest)
+[![Build Status](https://travis-ci.org/keenan-v1/MapViewer.svg?branch=master)](https://travis-ci.org/keenan-v1/MapViewer)
+[![GitHub issues](https://img.shields.io/github/issues/keenan-v1/MapViewer.svg)](https://github.com/keenan-v1/MapViewer/issues)
+[![GitHub version](https://badge.fury.io/gh/keenan-v1%2FMapViewer.svg)](https://github.com/keenan-v1/MapViewer/releases/latest)
 
 Opens maps created by WurmAPI
 
-# Latest Update (1.3.4)
-- Added Rocksalt & Sandstone
-- Updated bundled common library to 1.3.5.5
+# Latest Update (1.3.8)
+- CLI via new flags
+- Localization (no translations yet)
 
 ## Requirements
 ### Running MapViewer

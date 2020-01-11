@@ -1,4 +1,4 @@
-package com.wurmly.mapviewer.ui;
+package com.wurmly.mapviewer.shared;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -6,12 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-class ImageFileTypeFilter extends FileFilter
+public class ImageFileTypeFilter extends FileFilter
 {
-    static final int TYPE_PNG = 0;
-    static final int TYPE_JPG = 1;
-    static final int TYPE_GIF = 2;
-    static final int TYPE_BMP = 3;
+    public static final int TYPE_PNG = 0;
+    public static final int TYPE_JPG = 1;
+    public static final int TYPE_GIF = 2;
+    public static final int TYPE_BMP = 3;
     private static final String[] extensions = {".png", ".jpg", ".gif", ".bmp"};
     private static final String[] descriptions = {"PNG", "JPG", "GIF", "BMP"};
     private final String extension;
@@ -48,12 +48,12 @@ class ImageFileTypeFilter extends FileFilter
         return extensions[type];
     }
 
-    int getType()
+    public int getType()
     {
         return type;
     }
 
-    String getExtension()
+    public String getExtension()
     {
         return this.extension;
     }

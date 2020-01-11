@@ -1,6 +1,7 @@
 package com.wurmly.mapviewer.ui;
 
 import com.wurmly.mapviewer.localization.Localization;
+import com.wurmly.mapviewer.shared.MapType;
 import com.wurmonline.mesh.Tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
